@@ -1,44 +1,50 @@
-import { ChainNetwork, OreId, Transaction } from "oreid-js";
-import { transferNftTransaction } from "../createTransactions/transferTransaction";
+import { ChainNetwork, ChainPlatformType, OreId, Transaction } from "oreid-js";
+import { transferTransactionEosData } from "../tranactionTemplates/transferTransactionEos";
+import { transferTransactionEthData } from "../tranactionTemplates/transferTransactionEth";
 
 export const transferTransaction = async ({
-	oreId,
-	assetIds,
-	chainNetwork,
-	fromAccount,
-	toAccount,
-	memo,
-	permission,
+  oreId,
+  chainNetwork,
+  fromAccount,
+  toAccount,
+  memo,
+  permission,
+  quantity,
 }: {
-	oreId: OreId;
-	chainNetwork: ChainNetwork;
-	assetIds: string[];
-	fromAccount: string;
-	toAccount: string;
-	memo: string;
-	permission?: string;
+  oreId: OreId;
+  chainNetwork: ChainNetwork;
+  fromAccount: string;
+  toAccount: string;
+  memo: string;
+  quantity: string;
+  permission?: string;
 }): Promise<Transaction> => {
-	const account = oreId.auth.user.data.chainAccounts.find(
-		(chainAccount) => chainAccount.chainNetwork === chainNetwork
-	);
-	if (!account) {
-		throw new Error(`No account found for ${chainNetwork}`);
-	}
+  let transactionData;
 
-	const transactionData = transferNftTransaction({
-		assetIds,
-		fromAccount,
-		toAccount,
-		permission: permission || "active",
-		memo,
-		// offerId: sale.offer_id,
-	});
+  let networkInfo = await oreId.getChainNetworkSettings(chainNetwork);
 
-	return oreId.createTransaction({
-		account: oreId.auth.user.data.accountName,
-		chainAccount: account.chainAccount,
-		chainNetwork: account.chainNetwork,
-		transaction: { actions: transactionData } as any,
-		signOptions: { broadcast: true },
-	});
+  if (networkInfo.type === ChainPlatformType.ethereum) {
+    transactionData = transferTransactionEthData({
+      fromAccount,
+      toAccount,
+      memo,
+      quantity,
+    });
+  } else if (networkInfo.type === ChainPlatformType.eos) {
+    transactionData = transferTransactionEosData({
+      fromAccount,
+      toAccount,
+      permission: permission || "active",
+      memo,
+      quantity,
+    });
+  }
+
+  return oreId.createTransaction({
+    account: oreId.auth.user.data.accountName,
+    chainAccount: fromAccount,
+    chainNetwork,
+    transaction: { actions: transactionData } as any,
+    signOptions: { broadcast: true },
+  });
 };

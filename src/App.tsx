@@ -14,7 +14,7 @@ const REACT_APP_OREID_APP_ID = "t_737abd6f1be94250ae1b68ddbeb43e28";
 const oreId = new OreId({
 	appName: "Telos Developer Demo",
 	appId: REACT_APP_OREID_APP_ID,
-	oreIdUrl: "https://dev.service.oreid.io",
+	oreIdUrl: "https://staging.service.oreid.io",
 	plugins: {
 		popup: WebPopup(),
 	},

@@ -8,12 +8,12 @@ export const Main: React.FC = () => {
 	const [error, setError] = useState<Error | undefined>();
 	const [loading, setLoading] = useState(true);
 
-	let telosAccount: string | undefined
-	let telosEvmAccount: string | undefined
+	let telosAccount: string
+	let telosEvmAccount: string
 
 	const user = useUser();
-	telosAccount = user?.chainAccounts?.find((ca) => ca.chainNetwork === ChainNetwork.TelosTest)?.chainAccount;
-	telosEvmAccount = user?.chainAccounts?.find((ca) => ca.chainNetwork === ChainNetwork.TelosEvmTest)?.chainAccount;
+	telosAccount = user?.chainAccounts?.find((ca) => ca.chainNetwork === ChainNetwork.TelosTest)?.chainAccount || '';
+	telosEvmAccount = user?.chainAccounts?.find((ca) => ca.chainNetwork === ChainNetwork.TelosEvmTest)?.chainAccount || '';
 
 	return (
 		<div className={styles.Main}>

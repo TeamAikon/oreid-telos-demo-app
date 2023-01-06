@@ -35,9 +35,8 @@ export async function getEosBalance(
 		chainAccount,
 		symbol.toUpperCase()
 	);
-	// format '5.0000 EOS' to '5'
+	// format '5.0000 EOS' to '5.0000'
 	let [amount] = balance?.split(" ");
-	amount = amount?.replace(".", "") || "000000000";
 	return amount;
 }
 
