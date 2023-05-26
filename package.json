@@ -6,6 +6,8 @@
     "node": "18.x.x"
   },
   "dependencies": {
+    "@babel/plugin-syntax-flow": "7.14.5",
+    "@babel/plugin-transform-react-jsx":"7.14.9",
     "concurrently": "^4.1.2",
     "cors": "^2.8.5",
     "dotenv": "^8.1.0",
@@ -39,7 +41,7 @@
     "ts-node": "^10.7.0"
   },
   "resolutions": {
-    "react-error-overlay": "6.0.9"
+    "react-error-overlay": "6.x.x"
   },
   "scripts": {
     "build": "npm run build-frontend && npm run build-backend",
